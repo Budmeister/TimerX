@@ -4,8 +4,6 @@ import android.app.AlertDialog
 import android.os.Bundle
 import android.text.InputType
 import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
 import android.widget.EditText
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -20,7 +18,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     companion object{
-//        lateinit var dataProcessor: DataProcessor
 
         lateinit var homeFragment: HomeFragment
         lateinit var statsFragment: StatsFragment
@@ -28,11 +25,6 @@ class MainActivity : AppCompatActivity() {
 
         lateinit var mainActivity: MainActivity
         lateinit var viewModel: MainViewModel
-
-//        lateinit var settings: Settings
-
-//        var colors = HashMap<String, Int>()
-        var deletingExercises = false
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,18 +41,9 @@ class MainActivity : AppCompatActivity() {
         statsFragment = StatsFragment(this)
         feedFragment = FeedFragment(this)
 
-//        viewModel.getLiveCurrentRecord().observe(this){
-//            if(it != null)
-//                onRecordCreated(it)
-//        }
-
-//        lifecycleScope.launch{
-//            settings = Settings(mutableListOf(), mutableListOf())
-//            saveColorsToSettingsObject()
         setContentView(binding.root)
         setCurrentFragment(homeFragment)
-//            FileManager.saveSettings(this@MainActivity, settings)
-//        }
+
         lifecycleScope.launch { statsFragment.loadResults() }
 
         binding.bottomNavigationView.setOnItemSelectedListener {
@@ -76,36 +59,15 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-//    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-//        menuInflater.inflate(R.menu.delete_exercise_menu, menu)
-//        return true
-//    }
-
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        if(item.title == "Delete") {
-//            item.title = "Done"
-//            deletingExercises = true
-//        }else {
-//            item.title = "Delete"
-//            deletingExercises = false
-//        }
-//        return true
-//    }
-
     private fun setCurrentFragment(fragment: Fragment) =
         supportFragmentManager.beginTransaction().apply{
             replace(R.id.flSelFragment, fragment)
             commit()
         }
 
-//    fun onRecordCreated(er: ExerciseRecord){
-//        viewModel.getLiveDataProcessor().value!!.addRecord(er.title, er)
-//        Log.i("MainActivity", "Exercise created: $er, " + DataProcessor.formatTime(er.length()))
-//    }
-
     override fun onPause() {
         super.onPause()
-        Log.d("MainActivity", "Activity Paused")
+        Log.i("MainActivity", "Activity Paused")
         lifecycleScope.launch {
             Log.i("Main Activity", "Writing files")
             viewModel.apply{
@@ -116,17 +78,6 @@ class MainActivity : AppCompatActivity() {
             }
             Log.i("MainActivity", "Files written")
         }
-//        dataProcessor.writeRecords(this)
-//        lifecycleScope.launch {
-//            homeFragment.forceRecordCreated()
-//            viewModel.writeRecords()
-//            saveColorsToSettingsObject()
-//            FileManager.saveSettings(this@MainActivity, settings)
-//        }
-    }
-
-    override fun onStop(){
-        super.onStop()
     }
 
     fun deleteExercise(name: String) {

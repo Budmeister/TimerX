@@ -27,7 +27,6 @@ class FeedFragment(
         val minVelocity = 450
         binding.primaryRecycler.onFlingListener = object: RecyclerView.OnFlingListener(){
             override fun onFling(velocityX: Int, velocityY: Int): Boolean { // just snap
-                Log.d("FeedFragment", "$velocityX")
                 val layoutManager = binding.primaryRecycler.layoutManager ?: return false
                 val snapView =
                     if(velocityX > minVelocity)

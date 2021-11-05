@@ -54,9 +54,6 @@ class HomeRecycleViewAdapter(
         storeExerciseRecord()
         MainActivity.viewModel.createCurrentRecord(name)
         buttons[name]?.setIsRunning(true)
-//        fragment.currentRecord = ExerciseRecord(name, Calendar.getInstance().timeInMillis, -1)
-//        fragment.currentRecordingButton = button
-//        fragment.currentRecordingButton?.setIsRunning(true)
     }
 
     fun storeExerciseRecord(){
@@ -64,14 +61,6 @@ class HomeRecycleViewAdapter(
         if(currentRecord != null)
             buttons[currentRecord.title]?.setIsRunning(false)
         MainActivity.viewModel.storeCurrentRecordToDataProcessor()
-//        if(fragment.currentRecord != null){
-//            var cr = fragment.currentRecord as ExerciseRecord
-//            cr.endTime = Calendar.getInstance().timeInMillis
-//            fragment.onRecordCreated(cr)
-//            fragment.currentRecord = null
-//            fragment.currentRecordingButton?.setIsRunning(false)
-//            fragment.currentRecordingButton = null
-//        }
     }
 
     override fun onBindViewHolder(holder: ExerciseViewHolder, position: Int) {
@@ -98,19 +87,14 @@ class HomeRecycleViewAdapter(
             }else {
                 val currentRecord = MainActivity.viewModel.currentRecord
                 if(currentRecord != null && currentRecord.title == name){
-//                if(name == fragment.currentRecord?.title){
                     button.setIsRunning(true)
-//                    fragment.currentRecordingButton = button
                 }
                 button.setOnClickListener {
-//                    if(fragment.deletingExercises){
-//                    }else {
                         if (button.isRunning()) {
                             MainActivity.viewModel.currentRecord?.endTime = -1
                             storeExerciseRecord()
                         }else
                             createExerciseRecord(name)
-//                    }
                 }
                 button.setOnLongClickListener {
 
@@ -119,9 +103,7 @@ class HomeRecycleViewAdapter(
                 }
                 button.setIcon(play)
             }
-//
-//            buttons[b].setCompoundDrawables(null, play, null, null)
-//            buttons[b].setBackgroundResource(R.drawable.ic_play)
+
             this.buttons[name] = buttons[b]
         }
     }
@@ -157,10 +139,6 @@ class HomeRecycleViewAdapter(
         exercises.removeAt(index)
         exercises.sortBy { widget -> if(widget.name == "") "zzzzzzzzzzzzzzzzzzzzzz" else widget.name }
         notifyDataSetChanged()
-//        for(i in 0 until itemCount)
-//            notifyItemChanged(i)
-//        if(itemCount % 2 == 0)
-//            notifyItemRemoved(itemCount - 1)
     }
 
     private fun showAddExerciseColorPicker(name: String){

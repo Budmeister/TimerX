@@ -14,8 +14,6 @@ class HomeFragment(
 
     private lateinit var binding : FragmentHomeBinding
 
-//    var currentRecordingButton: ExerciseWidgetView? = null
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentHomeBinding.bind(view)
@@ -23,11 +21,7 @@ class HomeFragment(
         // setup
 
         val exercises = mutableListOf<ExerciseWidget>()
-//        exercises.add(ExerciseWidget("Calculus", Color.RED))
-//        exercises.add(ExerciseWidget("Statics",  Color.GREEN))
-//        exercises.add(ExerciseWidget("EPM",      Color.BLUE))
-//        exercises.add(ExerciseWidget("Physics",  Color.BLACK))
-//        exercises.add(ExerciseWidget("Circuits", Color.CYAN))
+
         for((name, color) in MainActivity.viewModel.colors)
             exercises.add(ExerciseWidget(name, color))
         exercises.sortBy { widget -> if(widget.name == "") "zzzzzzzzzzzzzzzzzzzzzz" else widget.name }

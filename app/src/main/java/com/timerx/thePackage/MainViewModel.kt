@@ -35,10 +35,9 @@ class MainViewModel(
         viewModelScope.launch(Dispatchers.Default) {
 //            liveSettings.postValue(loadSettings(getApplication()))
             settings = FileManager.loadSettings(getApplication())
-            Log.d("MainViewModel", "$settings")
             loadColors()
             currentRecord = settings.currentRecord
-            Log.d("MainViewModel", "$currentRecord")
+            Log.i("MainViewModel", "Current record: $currentRecord")
             // testing
 //            dataProcessor = DataGenerator.generateData(DataGenerator.GAUSSIAN, 0)
 //            DataGenerator.generateData(dataProcessor, DataGenerator.GAUSSIAN, 1)
@@ -123,7 +122,6 @@ class MainViewModel(
             if(dataProcessor.relevantResults == null)
                 dataProcessor.initRelevantResults()
             dataProcessor.relevantResults.addAll(results)
-            Log.d("DataProcessor", "" + w)
             if (w == numWeeks - 1)
                 dataProcessor.isRelevantResultsReady = true
         }
@@ -135,14 +133,13 @@ class MainViewModel(
     suspend fun writeRecords() {
         dataProcessor.sortWeeks()
         val weekRecords = ArrayList<ExerciseRecord>()
-        Log.d("MainViewModel", "${dataProcessor.weeks}")
         if (dataProcessor.weeks != null) {
             dataProcessor.weeks.forEach { (name: String?, ws: ArrayList<ExerciseWeek?>) ->
                 if (ws[0] != null) weekRecords.addAll(ws[0]!!.records)
             }
-            Log.d("MainViewModel", "Saving week")
+            Log.i("MainViewModel", "Saving week")
             FileManager.saveWeek(getApplication(), 0, weekRecords)
-            Log.d("MainViewModel", "Week saved")
+            Log.i("MainViewModel", "Week saved")
         }
         if (dataProcessor.organizedResults != null) {
             val results = ArrayList<AnalysisResult>()
@@ -185,7 +182,7 @@ class MainViewModel(
         if(currentRecord != null){
             if(currentRecord!!.endTime == -1L)
                 currentRecord!!.endTime = Calendar.getInstance().timeInMillis
-            Log.d("MainViewModel", "ExerciseCreated ${DataProcessor.formatTime(currentRecord!!.length())}")
+            Log.i("MainViewModel", "ExerciseCreated ${DataProcessor.formatTime(currentRecord!!.length())}")
             dataProcessor.addRecord(currentRecord!!.title, currentRecord)
             currentRecord = null
         }

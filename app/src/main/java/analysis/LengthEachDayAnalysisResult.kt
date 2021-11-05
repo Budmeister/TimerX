@@ -43,7 +43,6 @@ class LengthEachDayAnalysisResult(
         chart.xLabelsFontSize = 30.0f
         chart.xLabelsPad = 10.0f
         val h = lengthEachDay[longestDay] / DataProcessor.MILLISECONDS_PER_HOUR + 1
-        Log.d("LengthEachDayAnalysisResult", "h=$h")
         chart.barRef = h * DataProcessor.MILLISECONDS_PER_HOUR
         val maxYLabels = 8
         var numYLabels = h.toInt()-1

@@ -21,7 +21,6 @@ class FileManager {
 
         var weeks = mutableListOf<ExerciseWeek?>()
         var analysisList = ArrayList<MutableList<AnalysisResult>?>()
-        var metaAnalysisList = ArrayList<AnalysisResult>()
 
         private fun recordFileName(w: Int) : String =
             "${MainActivity.viewModel.dataProcessor.getWeekStart(w)}.json"
@@ -33,13 +32,6 @@ class FileManager {
 
         fun weekLoaded(w: Int): Boolean =
             w >= 0 && w < weeks.size && weeks[w] != null
-
-        fun startLoadWeekSubroutine(context: MainActivity, w: Int, runAfter: Runnable?) {
-            context.lifecycleScope.launch{
-                loadWeek(context, w)
-                runAfter?.run()
-            }
-        }
 
         suspend fun loadWeek(context: Context, w: Int) : Boolean {
             var week = listOf<ExerciseRecord>()
@@ -77,15 +69,6 @@ class FileManager {
             return true
         }
 
-        fun startLoadAnalysisSubroutine(context: MainActivity, types: Array<String>, names: List<String>, w: Int, runAfter: Runnable?){
-            Log.d("FileManager", "Hello")
-            context.lifecycleScope.launch{
-                loadAnalysis(context, types, names, w)
-                Log.d("FileManager", "there")
-                runAfter?.run()
-            }
-        }
-
         suspend fun loadAnalysis(context: Context, types: Array<String>, names: List<String>, w: Int) : Array<Boolean>{
             val results = mutableListOf<AnalysisResult>()
             val successes = Array(types.size * names.size){ false }
@@ -117,7 +100,7 @@ class FileManager {
                         }
                     }
                 }
-                Log.d("FileManager", "Types: ${Arrays.toString(types)}, Results: $results")
+                Log.i("FileManager", "Analyses loaded; types: ${Arrays.toString(types)}, Results: $results")
                 // this line is being run
                 // but this line is not
                 while(analysisList.size <= w)
@@ -129,15 +112,9 @@ class FileManager {
                 }else{
                     curList.addAll(results)
                 }
-                Log.d("FileManager", "General")
                 successes
             }
         }
-
-        // Do not store meta analysis results
-//        // wstart > wend since week indexes count down as time increases
-//        private fun metaAnalysisFilename(type: String, wstart: Int, wend: Int) : String =
-//            "${type}_${MainActivity.dataProcessor.getWeekStart(wstart)}_${MainActivity.dataProcessor.getWeekStart(wend)}.json"
 
         suspend fun loadSettings(context: Context): Settings = withContext(Dispatchers.IO) {
             var settings: Settings
