@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/miHome"
+        android:title="Home"
+        android:icon="@drawable/ic_home"/>
+    <item
+        android:id="@+id/miFeed"
+        android:title="Feed"
+        android:icon="@drawable/ic_feed"/>
+    <item
+        android:id="@+id/miStats"
+        android:title="Stats"
+        android:icon="@drawable/ic_stats"/>
+
+</menu>

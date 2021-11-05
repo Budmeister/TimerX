@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="BarChart">
+        <attr name="backColor" format="color"/>
+        <attr name="accentColor" format="color"/>
+        <attr name="margin" format="float"/>
+        <attr name="borderColor" format="color"/>
+        <attr name="xGap" format="float"/>
+        <attr name="xLabelsPad" format="float"/>
+        <attr name="xLabelsFontSize" format="float"/>
+        <attr name="yLabelsTextWidth" format="float"/>
+        <attr name="yLabelsPad" format="float"/>
+        <attr name="yLabelsFontSize" format="float"/>
+        <attr name="legendPad" format="float"/>
+        <attr name="legendFontSize" format="float"/>
+    </declare-styleable>
+
+    <declare-styleable name="ExerciseWidgetView">
+        <attr name="text" format="string"/>
+        <attr name="color" format="color"/>
+        <attr name="textColor" format="color"/>
+    </declare-styleable>
+
+    <declare-styleable name="CalendarView">
+<!--        <attr name="backColor" format="color"/>-->
+<!--        <attr name="accentColor" format="color"/>-->
+<!--        <attr name="margin" format="float"/>-->
+<!--        <attr name="borderColor" format="color"/>-->
+        <attr name="dayInitialsFontSize" format="float"/>
+
+    </declare-styleable>
+
+</resources>
