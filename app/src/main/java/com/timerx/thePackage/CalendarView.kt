@@ -9,7 +9,7 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.core.content.withStyledAttributes
 
-class CalendarView(
+class CalendarView<T : TimeElement>(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
@@ -71,8 +71,8 @@ class CalendarView(
     private var plotWidth = 0f
     private var plotHeight = 0f
 
-    private var data: MutableList<TimeElement> = mutableListOf()
-    var colors: HashMap<String, Int> = HashMap()
+    private var data: MutableList<T> = mutableListOf()
+    var colorProvider: (T) -> Int = { te: T -> Color.BLACK }
     var startTime = 0L
     var endTime = MILLISECONDS_PER_DAY
     var weekStart = -1L         // -1 = plot all elements mod (MILLISECONDS_PER_DAY * 7)
@@ -80,12 +80,12 @@ class CalendarView(
 
     var dayInitialsFontSize = 55.0f
 
-    fun setData(data: MutableList<TimeElement>){
+    fun setData(data: MutableList<T>){
         this.data = data
         invalidate()
     }
 
-    fun addElement(element: TimeElement){
+    fun addElement(element: T){
         data.add(element)
     }
 
@@ -124,15 +124,22 @@ class CalendarView(
             margin + plotHeight, paint)
 
         // exercises
+        val w = plotWidth / daysPerWeek
         for(element in data){
             val day =
+                // if weekStart == -1L, then show all elements, but if it is set to a value,
+                // then show only the elements in this week
                 if(weekStart == -1L)
                     ((element.startTime() % (MILLISECONDS_PER_DAY * daysPerWeek)) / MILLISECONDS_PER_DAY).toInt()
                 else
                     ((element.startTime() - weekStart) / MILLISECONDS_PER_DAY).toInt()
             if(day < 0 || day >= daysPerWeek)
                 continue
-            val x = (day * plotWidth / daysPerWeek).toInt()// TODO finish rendering CalendarView
+            val x = day * plotWidth / daysPerWeek
+            val y = (element.startTime() % MILLISECONDS_PER_DAY) * plotHeight / MILLISECONDS_PER_DAY
+            val h = element.length() * plotHeight / MILLISECONDS_PER_DAY
+            paint.color = colorProvider.invoke(element)
+            canvas.drawRect(x, y, w, h, paint)
         }
 
     }

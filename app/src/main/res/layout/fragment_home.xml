@@ -10,7 +10,6 @@
         android:id="@+id/rvHome"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:layout_editor_absoluteX="0dp" />
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </FrameLayout>
