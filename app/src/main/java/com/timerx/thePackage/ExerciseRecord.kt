@@ -24,4 +24,16 @@ class ExerciseRecord(var title: String, var startTime: Long, var endTime: Long) 
     fun mid(): Long {
         return (endTime + startTime) / 2
     }
+
+    override fun length(length: Long) {
+        endTime = startTime + length
+    }
+
+    override fun startTime(startTime: Long) {
+        this.startTime = startTime
+    }
+
+    override fun copy(): TimeElement {
+        return ExerciseRecord(title, startTime, endTime)
+    }
 }

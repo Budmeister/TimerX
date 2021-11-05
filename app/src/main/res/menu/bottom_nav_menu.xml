@@ -10,6 +10,10 @@
         android:title="Feed"
         android:icon="@drawable/ic_feed"/>
     <item
+        android:id="@+id/miCalendar"
+        android:title="Calendar"
+        android:icon="@drawable/ic_cal"/>
+    <item
         android:id="@+id/miStats"
         android:title="Stats"
         android:icon="@drawable/ic_stats"/>

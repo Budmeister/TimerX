@@ -21,6 +21,7 @@ class MainActivity : AppCompatActivity() {
 
         lateinit var homeFragment: HomeFragment
         lateinit var statsFragment: StatsFragment
+        lateinit var calendarFragment: CalendarFragment
         lateinit var feedFragment: FeedFragment
 
         lateinit var mainActivity: MainActivity
@@ -39,6 +40,7 @@ class MainActivity : AppCompatActivity() {
         // initialize fragments
         homeFragment = HomeFragment(this)
         statsFragment = StatsFragment(this)
+        calendarFragment = CalendarFragment(this)
         feedFragment = FeedFragment(this)
 
         setContentView(binding.root)
@@ -48,9 +50,10 @@ class MainActivity : AppCompatActivity() {
 
         binding.bottomNavigationView.setOnItemSelectedListener {
             when(it.itemId){
-                R.id.miHome  -> setCurrentFragment(homeFragment)
-                R.id.miStats -> setCurrentFragment(statsFragment)
-                R.id.miFeed  -> setCurrentFragment(feedFragment)
+                R.id.miHome     -> setCurrentFragment(homeFragment)
+                R.id.miStats    -> setCurrentFragment(statsFragment)
+                R.id.miCalendar -> setCurrentFragment(calendarFragment)
+                R.id.miFeed     -> setCurrentFragment(feedFragment)
             }
             true
         }

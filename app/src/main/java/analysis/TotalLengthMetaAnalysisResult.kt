@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.timerx.thePackage.*
 import com.timerx.thePackage.databinding.WidgetAnalysisChartBinding
+import custom_views.BarChart
 import kotlinx.serialization.Serializable
 import java.util.*
 

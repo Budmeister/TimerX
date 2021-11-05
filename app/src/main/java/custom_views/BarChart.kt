@@ -1,4 +1,4 @@
-package com.timerx.thePackage
+package custom_views
 
 import android.content.Context
 import android.graphics.Canvas
@@ -8,6 +8,7 @@ import android.graphics.Typeface
 import android.util.AttributeSet
 import android.view.View
 import androidx.core.content.withStyledAttributes
+import com.timerx.thePackage.R
 
 class BarChart @JvmOverloads constructor(
     context: Context,
