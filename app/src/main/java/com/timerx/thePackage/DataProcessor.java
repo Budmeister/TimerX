@@ -360,6 +360,15 @@ public class DataProcessor {
 		}
 		return w + " weeks ago";
 	}
+
+	public String formatWeekOfDate(int w){
+		long time = curWeekStart.getTimeInMillis() - MILLISECONDS_PER_WEEK * w;
+		Calendar weekStart = Calendar.getInstance();
+		weekStart.setTimeInMillis(time);
+		int month = weekStart.get(Calendar.MONTH) + 1;
+		int day = weekStart.get(Calendar.DAY_OF_MONTH);
+		return "Week of " + month + "/" + day;
+	}
 	
 	private static boolean contains(Object[] arr, Object obj) {
 		if(arr == null)

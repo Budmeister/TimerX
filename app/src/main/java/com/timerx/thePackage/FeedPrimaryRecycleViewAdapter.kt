@@ -20,7 +20,7 @@ class FeedPrimaryRecycleViewAdapter() : RecyclerView.Adapter<FeedPrimaryRecycleV
         )
         val secondaryBinding = RecycleLayoutFeedPrimaryBinding.bind(layout)
         val secondaryRecycler = secondaryBinding.recyclerView
-        val secondaryAdapter = FeedSecondaryRecycleViewAdapter(viewType)
+        val secondaryAdapter = FeedSecondaryRecycleViewAdapter(viewType, this)
         secondaryRecycler.adapter = secondaryAdapter
         secondaryRecycler.layoutManager = LinearLayoutManager(parent.context)
         return FeedPrimaryViewHolder(layout)

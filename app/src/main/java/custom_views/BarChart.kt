@@ -1,11 +1,9 @@
 package custom_views
 
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.Typeface
+import android.graphics.*
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
 import androidx.core.content.withStyledAttributes
 import com.timerx.thePackage.R
@@ -86,7 +84,8 @@ class BarChart @JvmOverloads constructor(
     private var legendHeight = 0f
     var legendPad = 12f                 // attr
     var legendFont = Typeface.create("Times New Roman",  Typeface.BOLD)
-    var legendFontSize = 55.0f          // attr
+    var legendFontSize = 40.0f          // attr
+    private var legendBounds: MutableList<Rect> = mutableListOf()
 
     var emphY : Long? = null
     var emphMessage : String? = null
@@ -140,16 +139,57 @@ class BarChart @JvmOverloads constructor(
 
     private fun updatePlotHeight(){
         plotHeight = height - margin * 2
-        if(key != null){
-            legendHeight = legendFontSize * ((key!!.size + 1) / 2) + legendPad * 2
-            plotHeight-=legendHeight
-        }else
-            legendHeight = 0f
+//        if(key != null){
+////            legendHeight = legendFontSize * ((key!!.size + 1) / 2) + legendPad * 2
+//            plotHeight-=legendHeight
+//        }else
+//            legendHeight = 0f
+        updateLegendBounds()
+        plotHeight-=legendHeight
         if(xLabels != null){
             xLabelsHeight = xLabelsFontSize + xLabelsPad
             plotHeight-=xLabelsHeight
         }else
             xLabelsHeight = 0f
+    }
+
+    /**
+     * This function should not be called directly. Instead, `updatePlotHeight` should be
+     * called, which calls this function and updates all dependant y variables.
+     */
+    private fun updateLegendBounds() {
+        if(key == null) {
+            legendHeight = 0f
+            legendBounds = mutableListOf()
+            return
+        }
+        legendBounds = mutableListOf()
+        paint.textSize = legendFontSize
+        var curY = 0f
+        var curX = 0f
+        for(k in key!!){
+            val b = Rect()
+            paint.getTextBounds(k, 0, k.length, b)
+            val w = b.width()
+            if(margin + legendPad * 2 + curX + w >= width - margin - legendPad * 2){
+                curX = 0f
+                curY+=legendFontSize + legendPad
+            }
+            b.set(
+                curX.toInt(),
+                curY.toInt(),
+                (curX + w).toInt(),
+                (curY + legendFontSize).toInt()
+            )
+            legendBounds.add(b)
+            curX+=w + legendPad * 4
+        }
+
+        legendHeight = legendPad +
+            if(curX == 0f)
+                curY
+            else
+                curY + legendFontSize + legendPad
     }
 
     private fun getBarX(barNum: Int): Float {
@@ -211,25 +251,28 @@ class BarChart @JvmOverloads constructor(
                 if(key != null) {
                     var y : Float
                     var x : Float
-                    if(key!!.size > 2) {
-                        y = margin + plotHeight + xLabelsHeight + legendPad + legendFontSize * (e / 3 + 1)
-                        x = when (e % 3) {
-                                0 -> margin + yLabelsWidth + xGap
-                                1 -> width / 3f
-                                else -> 2 * width / 3f
-                            }
-                        x = margin + yLabelsWidth + xGap + plotWidth * e / 3
-                        paint.textSize = legendFontSize * 2 / 3
-                    }else{
-                        y = margin + plotHeight + xLabelsHeight + legendPad + legendFontSize * (e / 2 + 1)
-                        x = when(e % 2) {
-                            0 -> margin + yLabelsWidth + xGap
-                            else -> width / 2f
-                        }
-                        paint.textSize = legendFontSize
-                    }
+//                    if(key!!.size > 2) {
+//                        y = margin + plotHeight + xLabelsHeight + legendPad + legendFontSize * (e / 3 + 1)
+//                        x = when (e % 3) {
+//                                0 -> margin + yLabelsWidth + xGap
+//                                1 -> width / 3f
+//                                else -> 2 * width / 3f
+//                            }
+////                        x = margin + yLabelsWidth + xGap + plotWidth * e / 3
+//                        paint.textSize = legendFontSize * 2 / 3
+//                    }else{
+//                        y = margin + plotHeight + xLabelsHeight + legendPad + legendFontSize * (e / 2 + 1)
+//                        x = when(e % 2) {
+//                            0 -> margin + yLabelsWidth + xGap
+//                            else -> width / 2f
+//                        }
+//                        paint.textSize = legendFontSize
+//                    }
+                    x = margin + legendPad * 2 + legendBounds[e].left
+                    y = margin + plotHeight + xLabelsHeight + legendPad + legendBounds[e].bottom
                     paint.textAlign = Paint.Align.LEFT
                     paint.typeface = legendFont
+                    paint.textSize = legendFontSize
                     canvas.drawText(key!![e], x, y, paint)
                 }
             }

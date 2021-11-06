@@ -28,9 +28,18 @@ class CalendarRecycleViewAdapter(
 
     override fun onBindViewHolder(holder: CalendarViewHolder, position: Int) {
         val layoutBinding = WidgetCalendarBinding.bind(holder.itemView)
+        // title
         val textView = layoutBinding.tvTitle
-        textView.text = DataProcessor.formatWeekIndex(position)
+        if(position == 0) {
+            textView.text = DataProcessor.formatWeekIndex(position)
+            layoutBinding.rightArrow.setImageResource(R.drawable.ic_empty)
+        }else {
+            textView.text = MainActivity.viewModel.dataProcessor.formatWeekOfDate(position)
+        }
+        if (position == numWeeks - 1)
+            layoutBinding.leftArrow.setImageResource(R.drawable.ic_empty)
 
+        // calendar view
         val calendar = layoutBinding.calendar
         calendar.colorProvider = { er ->
             MainActivity.viewModel.colors[(er as ExerciseRecord).title]?: Color.LTGRAY

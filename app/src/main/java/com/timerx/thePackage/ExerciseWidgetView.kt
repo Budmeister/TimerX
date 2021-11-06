@@ -48,7 +48,7 @@ class ExerciseWidgetView(
     private var textColor = Color.WHITE
     private var radius = 50f
     private var isRunning = false
-    private var runningBorder = 30f
+    private var runningBorder = 20f
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         updateIconSize()
@@ -84,6 +84,7 @@ class ExerciseWidgetView(
 
     fun setIcon(icon: Drawable?){
         this.icon = icon
+        updateIconSize()
     }
 
     override fun onDraw(canvas: Canvas?) {

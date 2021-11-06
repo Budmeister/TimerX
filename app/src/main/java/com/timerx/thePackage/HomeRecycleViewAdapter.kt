@@ -26,8 +26,9 @@ class HomeRecycleViewAdapter(
     }
 
     private val buttons = HashMap<String, ExerciseWidgetView>()
-    val play = ResourcesCompat.getDrawable(MainActivity.mainActivity.resources, R.drawable.ic_play, null)
-    val add = ResourcesCompat.getDrawable(MainActivity.mainActivity.resources, R.drawable.ic_add, null)
+    val play  = ResourcesCompat.getDrawable(MainActivity.mainActivity.resources, R.drawable.ic_play, null)
+    val pause = ResourcesCompat.getDrawable(MainActivity.mainActivity.resources, R.drawable.ic_pause, null)
+    val add   = ResourcesCompat.getDrawable(MainActivity.mainActivity.resources, R.drawable.ic_add, null)
 
     class ExerciseViewHolder(exerciseView: View) : RecyclerView.ViewHolder(exerciseView)
 
@@ -54,12 +55,15 @@ class HomeRecycleViewAdapter(
         storeExerciseRecord()
         MainActivity.viewModel.createCurrentRecord(name)
         buttons[name]?.setIsRunning(true)
+        buttons[name]?.setIcon(pause)
     }
 
     fun storeExerciseRecord(){
         val currentRecord = MainActivity.viewModel.currentRecord
-        if(currentRecord != null)
+        if(currentRecord != null) {
             buttons[currentRecord.title]?.setIsRunning(false)
+            buttons[currentRecord.title]?.setIcon(play)
+        }
         MainActivity.viewModel.storeCurrentRecordToDataProcessor()
     }
 
@@ -85,9 +89,11 @@ class HomeRecycleViewAdapter(
                 }
                 button.setIcon(add)
             }else {
+                button.setIcon(play)
                 val currentRecord = MainActivity.viewModel.currentRecord
                 if(currentRecord != null && currentRecord.title == name){
                     button.setIsRunning(true)
+                    button.setIcon(pause)
                 }
                 button.setOnClickListener {
                         if (button.isRunning()) {
@@ -101,7 +107,6 @@ class HomeRecycleViewAdapter(
                     showConfirmDeleteExerciseDialog(name, 2 * position + b)
                     true
                 }
-                button.setIcon(play)
             }
 
             this.buttons[name] = buttons[b]
