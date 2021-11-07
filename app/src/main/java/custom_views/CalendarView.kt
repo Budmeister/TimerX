@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
 import androidx.core.content.withStyledAttributes
 import com.timerx.thePackage.R
@@ -128,6 +129,7 @@ class CalendarView @JvmOverloads constructor(
             val element = data[i]
             val startTimeThisDay = getMillisecondsThisDay(getCalendar(element.startTime()))
             val endTimeThisDay = startTimeThisDay + element.length()
+            Log.d("CalendarView", "startTimeThisDay: $startTimeThisDay, endTimeThisDay: $endTimeThisDay")
             if(startTimeThisDay < realStartTime){
                 realStartTime = startTimeThisDay
                 if(realStartTime < 0)

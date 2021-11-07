@@ -156,6 +156,7 @@ class MainViewModel(
                 currentRecord!!.endTime = Calendar.getInstance().timeInMillis
             Log.i("MainViewModel", "ExerciseCreated ${DataProcessor.formatTime(currentRecord!!.length())}")
             dataProcessor.addRecord(currentRecord!!.title, currentRecord)
+            dataProcessor.sortWeeks()
             currentRecord = null
         }
     }

@@ -8,6 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.timerx.thePackage.databinding.WidgetCalendarBinding
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 class CalendarRecycleViewAdapter(
     val fragment: CalendarFragment,
@@ -70,8 +73,11 @@ class CalendarRecycleViewAdapter(
             if(position < week.size)
                 localRecords.addAll(week[position].records)
         val currentRecord = MainActivity.viewModel.currentRecord
-        if(position == 0 && currentRecord != null)
-            localRecords.add(currentRecord)
+        if(position == 0 && currentRecord != null) {
+            val currentRecordCopy = currentRecord.copy()
+            currentRecordCopy.endTime = Calendar.getInstance().timeInMillis
+            localRecords.add(currentRecordCopy)
+        }
         calendar.setData(localRecords)
         calendar.setOnTouchListener { v, event ->
             when(event.action){
