@@ -8,6 +8,10 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.timerx.thePackage.databinding.FragmentStatsBinding
 
+/**
+ * The Stats fragment of the main screen.
+ * @author Brian Smith
+ */
 class StatsFragment(
     private val mainActivity: MainActivity
 ) : Fragment(R.layout.fragment_stats) {

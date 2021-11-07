@@ -4,15 +4,21 @@ import analysis.*
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import generators.DataGenerator
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.util.*
 import kotlin.collections.HashMap
 
+/**
+ * Holds all the data of the app to be retrieved by MainActivity. As a [ViewModel],
+ * it outlives the activity, so the data is not re-retrieved between configuration
+ * changes.
+ * @author Brian Smith
+ * @see [MainActivity]
+ */
 class MainViewModel(
     application: Application
 ) : AndroidViewModel(application) {

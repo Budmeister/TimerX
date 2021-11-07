@@ -3,9 +3,7 @@ package com.timerx.thePackage
 import analysis.AnalysisResult
 import android.content.Context
 import android.util.Log
-import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.builtins.ListSerializer
@@ -15,7 +13,11 @@ import java.io.IOException
 import java.util.*
 import kotlin.collections.ArrayList
 
-//@Serializer(MyModel(1,"2"))
+/**
+ * Provides static functions to handle any file operations needed.
+ * Most are called from [MainViewModel].
+ * @author Brian Smith
+ */
 class FileManager {
     companion object {
 
@@ -101,8 +103,6 @@ class FileManager {
                     }
                 }
                 Log.i("FileManager", "Analyses loaded; types: ${Arrays.toString(types)}, Results: $results")
-                // this line is being run
-                // but this line is not
                 while(analysisList.size <= w)
                     analysisList.add(null)
                 val curList = analysisList[w]

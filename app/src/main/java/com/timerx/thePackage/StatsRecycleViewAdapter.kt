@@ -1,7 +1,6 @@
 package com.timerx.thePackage
 
 import analysis.AnalysisResult
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +8,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.timerx.thePackage.databinding.WidgetClearButtonBinding
 import java.util.*
 
+/**
+ * Handles the RecyclerView of the Stats Fragment.
+ * @author Brian Smith
+ */
 class StatsRecycleViewAdapter(
     val fragment: StatsFragment
 ) : RecyclerView.Adapter<StatsRecycleViewAdapter.ResultViewHolder>() {

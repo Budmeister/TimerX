@@ -1,15 +1,18 @@
 package generators;
 
-import android.graphics.Color;
 import android.util.Log;
+
+import com.timerx.thePackage.DataProcessor;
+import com.timerx.thePackage.ExerciseRecord;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-import com.timerx.thePackage.DataProcessor;
-import com.timerx.thePackage.ExerciseRecord;
-
+/**
+ * Generates data for a {@link DataProcessor}.
+ * @author Brian Smith
+ */
 public class DataGenerator {
 	
 	private static Random r = new Random();

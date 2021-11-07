@@ -1,21 +1,18 @@
 package com.timerx.thePackage
 
-import android.app.AlertDialog
 import android.graphics.Color
-import android.text.InputType
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.github.dhaval2404.colorpicker.ColorPickerDialog
-import com.github.dhaval2404.colorpicker.model.ColorShape
 import com.timerx.thePackage.databinding.WidgetExerciseBinding
 import com.timerx.thePackage.databinding.WidgetExerciseSingleBinding
-import kotlin.collections.HashMap
 
+/**
+ * Handles the RecyclerView of the Home Fragment.
+ * @author Brian Smith
+ */
 class HomeRecycleViewAdapter(
     private val fragment: HomeFragment
 ) : RecyclerView.Adapter<HomeRecycleViewAdapter.ExerciseViewHolder>() {

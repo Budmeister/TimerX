@@ -3,6 +3,13 @@ package com.timerx.thePackage
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 
+/**
+ * Allows a `RecyclerView` to always snap by one object rather than
+ * scrolling until it stops. Used in [FeedPrimaryRecycleViewAdapter]
+ * and [CalendarRecycleViewAdapter]. To be used in conjunction with
+ * [FlinglessLinearSnapHelper]
+ * @author Brian Smith
+ */
 class FlinglessFlingListener(
     val mRecyclerView: RecyclerView,
     val minVelocityToFling: Int,

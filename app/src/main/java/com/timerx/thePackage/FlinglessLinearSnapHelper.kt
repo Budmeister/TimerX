@@ -6,6 +6,13 @@ import androidx.recyclerview.widget.OrientationHelper
 import androidx.recyclerview.widget.RecyclerView
 import kotlin.math.abs
 
+/**
+ * Allows a `RecyclerView` to always snap by one object rather than
+ * scrolling until it stops. Used in [FeedPrimaryRecycleViewAdapter]
+ * and [CalendarRecycleViewAdapter]. To be used in conjunction with
+ * [FlinglessFlingListener]
+ * @author Brian Smith
+ */
 class FlinglessLinearSnapHelper : LinearSnapHelper() {
 
     private fun findCenterView(

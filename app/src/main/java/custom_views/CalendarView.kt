@@ -15,6 +15,11 @@ import java.lang.Long.max
 import java.lang.Long.min
 import java.util.*
 
+/**
+ * Allows [TimeElement]s to be displayed in a calendar view.
+ * Includes customizable start and end times and a now bar.
+ * @author Brian Smith
+ */
 class CalendarView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,

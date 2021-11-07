@@ -11,8 +11,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.timerx.thePackage.databinding.ActivityMainBinding
 import kotlinx.coroutines.launch
-import java.lang.NumberFormatException
 
+/**
+ * The main activity of the app.
+ * @author Brian Smith
+ * @see [MainViewModel]
+ */
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding

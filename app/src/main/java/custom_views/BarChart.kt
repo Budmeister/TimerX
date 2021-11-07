@@ -3,12 +3,19 @@ package custom_views
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
-import android.util.Log
 import android.view.View
 import androidx.core.content.withStyledAttributes
 import com.timerx.thePackage.R
-import java.util.*
 
+/**
+ * Custom view for displaying bar charts. Features:
+ * * xLabels,
+ * * yLabels,
+ * * key,
+ * * stacked values
+ * Used in: `TimerX`.
+ * @author Brian Smith
+ */
 class BarChart @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,

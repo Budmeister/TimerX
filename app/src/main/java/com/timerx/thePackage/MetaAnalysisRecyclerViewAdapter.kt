@@ -5,6 +5,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
+/**
+ * Allows all the `MetaAnalysisResult`s from one `MetaAnalysis`
+ * to be shown in one view with scrolling to previous weeks to the left.
+ * @author Brian Smith
+ * @see MetaAnalysisResult
+ */
 class MetaAnalysisRecyclerViewAdapter(
     val result: MetaAnalysisResult,
 ) : RecyclerView.Adapter<MetaAnalysisRecyclerViewAdapter.MetaAnalysisViewHolder>() {

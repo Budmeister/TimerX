@@ -27,7 +27,7 @@ import analysis.TotalLengthMetaAnalysisResult;
 /**
  * The class in charge of all the processing of data. Manages the {@code ExerciseWeek}s,
  * the {@code Analysis}'s, and the {@code FileManager}. 
- *
+ * @author Brian Smith
  */
 public class DataProcessor {
 	

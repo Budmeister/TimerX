@@ -10,7 +10,7 @@ import analysis.PostAnalysis;
 
 /**
  * Stores and analyzes all the information for a specific exercise for a specific week
- *
+ * @author Brian Smith
  */
 public class ExerciseWeek {
 	

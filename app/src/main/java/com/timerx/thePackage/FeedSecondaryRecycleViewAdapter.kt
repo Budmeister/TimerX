@@ -5,9 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.github.dhaval2404.colorpicker.util.setVisibility
 import com.timerx.thePackage.databinding.WidgetTitleBinding
 
+/**
+ * Handles the secondary RecyclerView in the feed fragment. Secondary (vertical) RecyclerViews
+ * are nested in primary (horizontal) RecyclerViews so that multiple weeks may be shown.
+ * @author Brian Smith
+ * @see [FeedPrimaryRecycleViewAdapter]
+ */
 class FeedSecondaryRecycleViewAdapter(
     val week: Int,
     val primary: FeedPrimaryRecycleViewAdapter

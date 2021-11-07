@@ -11,6 +11,11 @@ import android.view.View
 import androidx.core.content.withStyledAttributes
 import kotlin.math.min
 
+/**
+ * The view for one exercise widget in the home fragment. Starts
+ * recording when pressed and stores the record when unpressed.
+ * @author Brian Smith
+ */
 class ExerciseWidgetView(
     context: Context,
     attrs: AttributeSet?,

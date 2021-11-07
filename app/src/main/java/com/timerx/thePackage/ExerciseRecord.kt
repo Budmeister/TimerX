@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 /**
  * Represents a specific instance of exercise with the `title`,
  * the `startTime`, and the `endTime`.
- * @author brian
+ * @author Brian Smith
  */
 @Serializable
 class ExerciseRecord(var title: String, var startTime: Long, var endTime: Long) : TimeElement {

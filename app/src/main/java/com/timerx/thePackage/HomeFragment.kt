@@ -3,7 +3,6 @@ package com.timerx.thePackage
 import android.app.AlertDialog
 import android.os.Bundle
 import android.text.InputType
-import android.util.Log
 import android.view.View
 import android.widget.EditText
 import androidx.fragment.app.Fragment
@@ -11,8 +10,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.dhaval2404.colorpicker.ColorPickerDialog
 import com.github.dhaval2404.colorpicker.model.ColorShape
 import com.timerx.thePackage.databinding.FragmentHomeBinding
-import java.util.*
 
+/**
+ * The Home Fragment of the main screen.
+ * @author Brian Smith
+ * @see [MainActivity]
+ */
 class HomeFragment(
     private val mainActivity: MainActivity
 ) : Fragment(R.layout.fragment_home) {
@@ -25,12 +28,6 @@ class HomeFragment(
         binding = FragmentHomeBinding.bind(view)
 
         // setup
-
-//        val exercises = mutableListOf<ExerciseWidget>()
-//
-//        for((name, color) in MainActivity.viewModel.colors)
-//            exercises.add(ExerciseWidget(name, color))
-//        exercises.sortBy { widget -> if(widget.name == "") "zzzzzzzzzzzzzzzzzzzzzz" else widget.name }
         adapter = HomeRecycleViewAdapter(this)
         binding.rvHome.adapter = adapter
         updateAllData()

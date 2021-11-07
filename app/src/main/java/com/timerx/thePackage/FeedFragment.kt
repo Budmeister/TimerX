@@ -1,14 +1,15 @@
 package com.timerx.thePackage
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.timerx.thePackage.databinding.FragmentFeedBinding
 
-
+/**
+ * The Feed Fragment of the main screen
+ * @author Brian Smith
+ */
 class FeedFragment(
     private val mainActivity: MainActivity
 ) : Fragment(R.layout.fragment_feed) {

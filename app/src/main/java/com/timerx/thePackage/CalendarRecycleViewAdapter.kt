@@ -1,7 +1,6 @@
 package com.timerx.thePackage
 
 import android.graphics.Color
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -9,9 +8,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.timerx.thePackage.databinding.WidgetCalendarBinding
 import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
+/**
+ * Handles the horizontal RecyclerView in the calendar fragment.
+ * @author Brian Smith
+ */
 class CalendarRecycleViewAdapter(
     val fragment: CalendarFragment,
     val data: HashMap<String, ArrayList<ExerciseWeek>>,

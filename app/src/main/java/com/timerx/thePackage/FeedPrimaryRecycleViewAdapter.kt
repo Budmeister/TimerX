@@ -8,6 +8,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.timerx.thePackage.databinding.RecycleLayoutFeedPrimaryBinding
 
+/**
+ * Handles the primary RecyclerView in the Feed Fragment.
+ * @author Brian Smith
+ * @see [FeedSecondaryRecycleViewAdapter]
+ */
 class FeedPrimaryRecycleViewAdapter(
     val fragment: FeedFragment
 ) : RecyclerView.Adapter<FeedPrimaryRecycleViewAdapter.FeedPrimaryViewHolder>() {
