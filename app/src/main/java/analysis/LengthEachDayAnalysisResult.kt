@@ -23,7 +23,7 @@ class LengthEachDayAnalysisResult(
     override var description: String? = null
 
     init {
-        description = ("Your longest day of " + title + " was " + DataProcessor.daysOfWeek[longestDay] + ". You spend "
+        description = ("Your longest day of " + title + " was " + DataProcessor.daysOfWeek[longestDay] + ". You spent "
                 + DataProcessor.formatTime(lengthEachDay[longestDay]) + " on " + title + " that day.")
     }
 

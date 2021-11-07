@@ -96,6 +96,9 @@ class CalendarView @JvmOverloads constructor(
     var realEndTime = endTime
     var showDayInitials = true
 
+    var showNowBar = false
+    var nowBarColor = Color.BLACK
+
     var dayInitialsFontSize = 55.0f
 
     fun setData(data: MutableList<TimeElement>){
@@ -221,6 +224,19 @@ class CalendarView @JvmOverloads constructor(
 
         // exercises
         renderData(data, canvas, paint)
+
+        // now bar
+        val nowCal = Calendar.getInstance()
+        val nowDay = nowCal[Calendar.DAY_OF_WEEK] - 1
+        val nowY = getElementY(getMillisecondsThisDay(nowCal))
+        paint.color = nowBarColor
+        canvas.drawLine(
+            getElementX(nowDay),
+            nowY,
+            getElementX(nowDay + 1),
+            nowY,
+            paint
+        )
 
     }
 
