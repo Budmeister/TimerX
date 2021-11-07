@@ -70,7 +70,7 @@ public class LengthEachDayMetaAnalysis implements MetaAnalysis {
 						longestDay = d;
 						longestLength = dayLengths[w][d];
 					}
-					avgLengthPerDay[0]+=dayLengths[w][d];
+					avgLengthPerDay[w]+=dayLengths[w][d];
 				}
 				this.longestDay[w] = longestDay;
 				avgLengthPerDay[w]/=7;

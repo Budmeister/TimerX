@@ -231,17 +231,19 @@ class CalendarView @JvmOverloads constructor(
         renderData(data, canvas, paint)
 
         // now bar
-        val nowCal = Calendar.getInstance()
-        val nowDay = nowCal[Calendar.DAY_OF_WEEK] - 1
-        val nowY = getElementY(getMillisecondsThisDay(nowCal))
-        paint.color = nowBarColor
-        canvas.drawLine(
-            getElementX(nowDay),
-            nowY,
-            getElementX(nowDay + 1),
-            nowY,
-            paint
-        )
+        if(showNowBar) {
+            val nowCal = Calendar.getInstance()
+            val nowDay = nowCal[Calendar.DAY_OF_WEEK] - 1
+            val nowY = getElementY(getMillisecondsThisDay(nowCal))
+            paint.color = nowBarColor
+            canvas.drawLine(
+                getElementX(nowDay),
+                nowY,
+                getElementX(nowDay + 1),
+                nowY,
+                paint
+            )
+        }
 
     }
 
