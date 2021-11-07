@@ -1,6 +1,7 @@
 package com.timerx.thePackage
 
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -71,7 +72,7 @@ class CalendarRecycleViewAdapter(
         }
         val localRecords = mutableListOf<TimeElement>()
         for((_, week) in data)
-            if(position < week.size)
+            if(position < week.size && week[position] != null)
                 localRecords.addAll(week[position].records)
         val currentRecord = MainActivity.viewModel.currentRecord
         if(position == 0 && currentRecord != null) {
@@ -92,7 +93,7 @@ class CalendarRecycleViewAdapter(
             }
             true
         }
-
+        calendar.showNowBar = position == 0
     }
 
     override fun getItemCount() = numWeeks

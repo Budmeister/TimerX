@@ -80,6 +80,8 @@ class MainViewModel(
 
 
 
+    val numWeeks = 5
+
     /**
      * Starts coroutines to read all the exercise records from this week and
      * to read all the analyses from the last 5 weeks except this one.
@@ -93,42 +95,46 @@ class MainViewModel(
         names: List<String>
     ) {
         dataProcessor.sortWeeks()
-        val numWeeks = 5
-        for (w in 1 until numWeeks) {
+        for (w in 0 until numWeeks) {
             // Load ExerciseRecords
             FileManager.loadWeek(getApplication(), w)
             if (FileManager.weekLoaded(w))
                 for (er in FileManager.weeks[w]!!.records)
                     dataProcessor.addRecord(er.title, er)
 
-            // Load AnalysisResults
-            FileManager.loadAnalysis(getApplication(), DataProcessor.analysisKeys, names, w)
-            val results: List<AnalysisResult> =
-                FileManager.analysisList[w]?: listOf()
-            if(dataProcessor.relevantResults == null)
-                dataProcessor.initRelevantResults()
-            dataProcessor.relevantResults.addAll(results)
-            if (w == numWeeks - 1)
-                dataProcessor.isRelevantResultsReady = true
+            if(w != 0) {
+                // Load AnalysisResults
+                FileManager.loadAnalysis(getApplication(), DataProcessor.analysisKeys, names, w)
+                val results: List<AnalysisResult> =
+                    FileManager.analysisList[w] ?: listOf()
+                if (dataProcessor.relevantResults == null)
+                    dataProcessor.initRelevantResults()
+                dataProcessor.relevantResults.addAll(results)
+                if (w == numWeeks - 1)
+                    dataProcessor.isRelevantResultsReady = true
+            }
         }
     }
 
-    suspend fun writeRecords() {
+    suspend fun writeRecords() = writeRecords(0)
+
+    suspend fun writeRecords(w: Int) {
         dataProcessor.sortWeeks()
         val weekRecords = ArrayList<ExerciseRecord>()
         if (dataProcessor.weeks != null) {
             dataProcessor.weeks.forEach { (name: String?, ws: ArrayList<ExerciseWeek?>) ->
-                if (ws[0] != null) weekRecords.addAll(ws[0]!!.records)
+                if (ws[w] != null) weekRecords.addAll(ws[w]!!.records)
             }
-            Log.i("MainViewModel", "Saving week")
-            FileManager.saveWeek(getApplication(), 0, weekRecords)
-            Log.i("MainViewModel", "Week saved")
+            Log.i("MainViewModel", "Saving week $w")
+            FileManager.saveWeek(getApplication(), w, weekRecords)
+            Log.i("MainViewModel", "Week $w saved")
         }
         if (dataProcessor.organizedResults != null) {
             val results = ArrayList<AnalysisResult>()
             dataProcessor.organizedResults.forEach { (name: String?, exercise: Array<Array<AnalysisResult?>?>) ->
                 if (name == DataProcessor.META_ANALYSIS_TITLE) return@forEach
-                val week = exercise[0]
+                if (w >= exercise.size) return@forEach
+                val week = exercise[w]
                 if (week != null)
                     results.addAll(listOf(*week))
             }
@@ -195,6 +201,7 @@ class MainViewModel(
         dataProcessor.findRelevantResults()
         currentRecord = null
         settings = Settings(colors.keys.toMutableList(), colors.values.toMutableList(), null)
+        viewModelScope.launch{ writeRecords(1) }
     }
 
 }

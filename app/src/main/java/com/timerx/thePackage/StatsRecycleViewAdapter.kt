@@ -51,7 +51,12 @@ class StatsRecycleViewAdapter(
     }
 
     fun loadResults(relevantResults: PriorityQueue<AnalysisResult>) {
-        results.addAll(relevantResults)
+//        results.addAll(relevantResults)
+        while(relevantResults.isNotEmpty()) {
+            val result = relevantResults.poll()!!
+            if (result.hasView())
+                results.add(result)
+        }
         notifyDataSetChanged()
     }
 

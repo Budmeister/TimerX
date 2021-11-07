@@ -1,5 +1,6 @@
 package com.timerx.thePackage
 
+import analysis.AnalysisResult
 import analysis.MetaAnalysisResult
 import android.view.LayoutInflater
 import android.view.View
@@ -50,7 +51,7 @@ class FeedSecondaryRecycleViewAdapter(
                 ?.get(DataProcessor.META_ANALYSIS_TITLE)
                 ?: return FeedSecondaryViewHolder(View(parent.context))
             val metaResults = metaWeek[0]
-            if(metaWeek.isEmpty() || metaResults == null || metaResults.isEmpty())
+            if(metaResults == null || metaWeek.isEmpty())
                 return FeedSecondaryViewHolder(View(parent.context))
             return FeedSecondaryViewHolder((metaResults[viewType-1] as MetaAnalysisResult).getItemView(parent, week))
         }
