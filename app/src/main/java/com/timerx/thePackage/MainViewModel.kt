@@ -93,13 +93,15 @@ class MainViewModel(
         names: List<String>
     ) {
         dataProcessor.sortWeeks()
-        FileManager.loadWeek(getApplication(), 0)
-        if (FileManager.weekLoaded(0))
-            for (er in FileManager.weeks[0]!!.records)
-                dataProcessor.addRecord(er.title, er)
-        dataProcessor.sortWeeks()
         val numWeeks = 5
         for (w in 1 until numWeeks) {
+            // Load ExerciseRecords
+            FileManager.loadWeek(getApplication(), w)
+            if (FileManager.weekLoaded(w))
+                for (er in FileManager.weeks[w]!!.records)
+                    dataProcessor.addRecord(er.title, er)
+
+            // Load AnalysisResults
             FileManager.loadAnalysis(getApplication(), DataProcessor.analysisKeys, names, w)
             val results: List<AnalysisResult> =
                 FileManager.analysisList[w]?: listOf()
