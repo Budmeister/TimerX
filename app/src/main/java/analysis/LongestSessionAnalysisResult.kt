@@ -3,6 +3,7 @@ package analysis
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.view.setPadding
 import com.timerx.thePackage.DataProcessor
 import kotlinx.serialization.Serializable
 import java.util.*
@@ -21,7 +22,8 @@ class LongestSessionAnalysisResult(
             val d = Date(time)
             c.time = d
             return "You spent " + DataProcessor.formatTime(length) + " on " + title + " on " +
-                    DataProcessor.daysOfWeek[c[Calendar.DAY_OF_WEEK]-1] + "."
+                    DataProcessor.daysOfWeek[c[Calendar.DAY_OF_WEEK]-1] + " " +
+                    DataProcessor.formatWeekIndex(weekNumber) + "."
         }
         set(description) {
             this@LongestSessionAnalysisResult.description = description
@@ -32,10 +34,12 @@ class LongestSessionAnalysisResult(
         return KEY
     }
 
+    override fun hasView() = true
+
     override fun getView(parent: ViewGroup): View {
         val view = TextView(parent.context)
         view.text = description
+        view.setPadding(15)
         return view
-        // TODO Create LongestSessionAnalysisResult view
     }
 }

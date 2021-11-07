@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.View
 import androidx.core.content.withStyledAttributes
 import com.timerx.thePackage.R
+import java.util.*
 
 class BarChart @JvmOverloads constructor(
     context: Context,
@@ -68,10 +69,13 @@ class BarChart @JvmOverloads constructor(
     private var plotHeight = 0f
 
     private var xLabels : Array<String>? = null
-    var xLabelsPad = 6f                 // attr
+    var xLabelsPad = 3f                 // attr
     private var xLabelsHeight = 0f
     var xLabelsFontSize = 55.0f         // attr
     var xLabelsFont = Typeface.create("Times New Roman",  Typeface.BOLD)
+    var avoidXLabelCollisions = true
+    var avoidXLabelCollisionsDecrement = 3f
+    var xLabelsFontSizesAfterCollisionCheck = arrayOf<Float>()
 
     private var yLabels : Array<String>? = null
     private var yLabelsHeights : LongArray? = null
@@ -139,18 +143,10 @@ class BarChart @JvmOverloads constructor(
 
     private fun updatePlotHeight(){
         plotHeight = height - margin * 2
-//        if(key != null){
-////            legendHeight = legendFontSize * ((key!!.size + 1) / 2) + legendPad * 2
-//            plotHeight-=legendHeight
-//        }else
-//            legendHeight = 0f
         updateLegendBounds()
         plotHeight-=legendHeight
-        if(xLabels != null){
-            xLabelsHeight = xLabelsFontSize + xLabelsPad
-            plotHeight-=xLabelsHeight
-        }else
-            xLabelsHeight = 0f
+        checkXLabelsCollisions()
+        plotHeight-=xLabelsHeight
     }
 
     /**
@@ -190,6 +186,89 @@ class BarChart @JvmOverloads constructor(
                 curY
             else
                 curY + legendFontSize + legendPad
+    }
+
+    private fun findWidestRect(rects: Array<Rect>) : Int{
+        if(rects.isEmpty())
+            return -1
+        var widestRect = rects[0]
+        var widestIndex = 0
+        for(i in 1 until rects.size){
+            if(rects[i].width() > widestRect.width()){
+                widestRect = rects[i]
+                widestIndex = i
+            }
+        }
+        return widestIndex
+    }
+
+    private fun findTallestRect(rects: Array<Rect>) : Int{
+        if(rects.isEmpty())
+            return -1
+        var tallestRect = rects[0]
+        var tallestIndex = 0
+        for(i in 1 until rects.size){
+            if(rects[i].height() > tallestRect.height()){
+                tallestRect = rects[i]
+                tallestIndex = i
+            }
+        }
+        return tallestIndex
+    }
+
+    /**
+     * This function should not be called directly instead, `updatePlotHeight` should
+     * be called which calls this one.
+     */
+    private fun checkXLabelsCollisions(){
+        if(xLabels == null) {
+            xLabelsHeight = 0f
+            return
+        }
+        if(xLabels!!.size <= 1 || !avoidXLabelCollisions) {
+            xLabelsFontSizesAfterCollisionCheck = Array(xLabels!!.size) { xLabelsFontSize }
+            return
+        }
+        fun getXLabelBounds(index: Int, fontSize: Float): Rect{
+            val b = Rect()
+            paint.textSize = fontSize
+            paint.getTextBounds(xLabels!![index], 0, xLabels!![index].length, b)
+            val w = b.width()
+            val x = getBarX(index) + barWidth / 2 - w / 2
+            val y = margin + plotHeight - xLabelsPad    // top
+            b.set(
+                x.toInt(),
+                y.toInt(),
+                (x + w).toInt(),
+                (y + fontSize).toInt()
+            )
+            return b
+        }
+        xLabelsFontSizesAfterCollisionCheck = Array(xLabels!!.size) { xLabelsFontSize }
+        val labelBounds = Array(xLabels!!.size) {
+            getXLabelBounds(it, xLabelsFontSize)
+        }
+        var collision = true
+        while(collision){
+            collision = false
+            val widest = findWidestRect(labelBounds)
+            val toCheck = mutableListOf<Int>()
+            if(widest != 0)
+                toCheck.add(widest - 1)
+            if(widest != labelBounds.size - 1)
+                toCheck.add(widest + 1)
+            for(i in toCheck){
+                if(Rect.intersects(labelBounds[i], labelBounds[widest])) {
+                    xLabelsFontSizesAfterCollisionCheck[i]-=avoidXLabelCollisionsDecrement
+                    xLabelsFontSizesAfterCollisionCheck[widest]-=avoidXLabelCollisionsDecrement
+                    labelBounds[i] = getXLabelBounds(i, xLabelsFontSizesAfterCollisionCheck[i])
+                    labelBounds[widest] = getXLabelBounds(widest, xLabelsFontSizesAfterCollisionCheck[widest])
+                    collision = true
+                }
+            }
+        }
+        val tallest = findTallestRect(labelBounds)
+        xLabelsHeight = labelBounds[tallest].height().toFloat() + xLabelsPad * 2
     }
 
     private fun getBarX(barNum: Int): Float {
@@ -249,27 +328,8 @@ class BarChart @JvmOverloads constructor(
 
                 // Legend
                 if(key != null) {
-                    var y : Float
-                    var x : Float
-//                    if(key!!.size > 2) {
-//                        y = margin + plotHeight + xLabelsHeight + legendPad + legendFontSize * (e / 3 + 1)
-//                        x = when (e % 3) {
-//                                0 -> margin + yLabelsWidth + xGap
-//                                1 -> width / 3f
-//                                else -> 2 * width / 3f
-//                            }
-////                        x = margin + yLabelsWidth + xGap + plotWidth * e / 3
-//                        paint.textSize = legendFontSize * 2 / 3
-//                    }else{
-//                        y = margin + plotHeight + xLabelsHeight + legendPad + legendFontSize * (e / 2 + 1)
-//                        x = when(e % 2) {
-//                            0 -> margin + yLabelsWidth + xGap
-//                            else -> width / 2f
-//                        }
-//                        paint.textSize = legendFontSize
-//                    }
-                    x = margin + legendPad * 2 + legendBounds[e].left
-                    y = margin + plotHeight + xLabelsHeight + legendPad + legendBounds[e].bottom
+                    val x : Float = margin + legendPad * 2 + legendBounds[e].left
+                    val y : Float = margin + plotHeight + xLabelsHeight + legendPad + legendBounds[e].bottom
                     paint.textAlign = Paint.Align.LEFT
                     paint.typeface = legendFont
                     paint.textSize = legendFontSize
@@ -296,9 +356,9 @@ class BarChart @JvmOverloads constructor(
                 paint.color = accentColor
                 paint.textAlign = Paint.Align.CENTER
                 paint.typeface = xLabelsFont
-                paint.textSize = xLabelsFontSize
                 val y = margin + plotHeight + xLabelsHeight - xLabelsPad / 2
                 for (i in 0 until numBars) {
+                    paint.textSize = xLabelsFontSizesAfterCollisionCheck[i]
                     val x = getBarX(i) + barWidth / 2
                     canvas.drawText(xLabels!![i], x, y, paint)
                 }

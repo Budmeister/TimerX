@@ -18,18 +18,21 @@ class LengthEachDayAnalysisResult(
     override var weekNumber: Int,
     @JvmField var lengthEachDay: LongArray,
     @JvmField var longestDay: Int,
+    @JvmField var avgLength: Long   // for emphasis line on graph
 ) : AnalysisResult() {
     override var description: String? = null
 
     init {
-        description = ("Your longest day of " + title + " was " + DataProcessor.daysOfWeek[longestDay] + " with "
-                + DataProcessor.formatTime(lengthEachDay[longestDay]) + " spent.")
+        description = ("Your longest day of " + title + " was " + DataProcessor.daysOfWeek[longestDay] + ". You spend "
+                + DataProcessor.formatTime(lengthEachDay[longestDay]) + " on " + title + " that day.")
     }
 
     companion object{ const val KEY = "ledar" }
     override fun key(): String {
         return KEY
     }
+
+    override fun hasView() = avgLength != 0L
 
     override fun getView(parent: ViewGroup): View {
         val layout = LayoutInflater.from(parent.context).inflate(R.layout.widget_analysis_chart, parent, false)
@@ -57,6 +60,7 @@ class LengthEachDayAnalysisResult(
         }
         chart.setYLabels(yLabels, yHeights)
         chart.yLabelsFontSize = 30.0f
+        chart.setEmphLine(avgLength, "avg")
         return layout
     }
 

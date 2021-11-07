@@ -40,7 +40,7 @@ public class TotalLengthAnalysis implements ParallelAnalysis{
 		
 		return new AnalysisResult[] {
 				new TotalLengthAnalysisResult(name, totalLengthRelevance(), weekNumber, totalLength),
-				new LengthEachDayAnalysisResult(name, lengthEachDayRelevance(), weekNumber, lengthEachDay, longestDay),
+				new LengthEachDayAnalysisResult(name, lengthEachDayRelevance(), weekNumber, lengthEachDay, longestDay, totalLength / 7),
 				new TimeOfDayAnalysisResult(name, timeOfDayRelevance(), weekNumber, lengthEachTimeOfDay, longestTimeOfDay)
 		};
 	}

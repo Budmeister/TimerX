@@ -29,6 +29,17 @@ class LengthEachDayMetaAnalysisResult(
             this@LengthEachDayMetaAnalysisResult.description = description
         }
 
+    fun getDescription(week: Int): String{
+        if(longestDay.size != 0 && dayLengths[week] != null)
+//            return "You tracked " + DataProcessor.formatTime(dayLengths[week]!![longestDay[week]]) +
+//                    " on " + DataProcessor.daysOfWeek[longestDay[0]] + "."
+            return "Your longest day was " + DataProcessor.daysOfWeek[longestDay[week]] + " with " +
+                DataProcessor.formatTime(dayLengths[week]!![longestDay[week]]) + " total.\n" +
+                "You averaged " + DataProcessor.formatTime(avgLengthPerDay[week]) + " per day."
+        return ""
+
+    }
+
     init {
         require(longestDay.size == lengths.size) { "You gave " + lengths.size + " weeks of lengths but " + longestDay.size + " weeks of longest day labels." }
     }
@@ -53,7 +64,8 @@ class LengthEachDayMetaAnalysisResult(
         val binding = WidgetAnalysisChartBinding.bind(layout)
         val chart = binding.chart
         val textView = binding.textView
-        textView.text = "Length each day ${DataProcessor.formatWeekIndex(viewType).lowercase()}:\n$description"
+        textView.text = "Length each day ${DataProcessor.formatWeekIndex(viewType).lowercase()}:\n${getDescription(viewType)}"
+
         val names = lengths[viewType].keys.toTypedArray()
         val data = lengths[viewType].values.toTypedArray()
         chart.setData(data)
@@ -80,6 +92,7 @@ class LengthEachDayMetaAnalysisResult(
         }
         chart.setYLabels(yLabels, yHeights)
         chart.yLabelsFontSize = 30.0f
+        chart.setEmphLine(avgLengthPerDay[viewType], "avg")
         return layout
     }
 }

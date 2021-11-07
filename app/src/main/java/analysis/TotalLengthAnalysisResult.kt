@@ -3,6 +3,7 @@ package analysis
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.view.setPadding
 import com.timerx.thePackage.DataProcessor
 import kotlinx.serialization.Serializable
 
@@ -24,10 +25,12 @@ class TotalLengthAnalysisResult(
         return KEY
     }
 
+    override fun hasView() = false
+
     override fun getView(parent: ViewGroup): View {
         val view = TextView(parent.context)
         view.text = description
+        view.setPadding(15)
         return view
-        // TODO Create TotalLengthAnalysisResult view
     }
 }

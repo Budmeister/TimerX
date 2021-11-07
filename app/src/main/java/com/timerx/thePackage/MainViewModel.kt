@@ -5,6 +5,7 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import generators.DataGenerator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -16,14 +17,12 @@ class MainViewModel(
     application: Application
 ) : AndroidViewModel(application) {
 
-//    private val liveSettings: MutableLiveData<Settings>
     var dataProcessor: DataProcessor
     var currentRecord: ExerciseRecord?
     var colors: HashMap<String, Int>
     var settings: Settings
 
     init{
-        // TODO create MainViewModel
         Log.i("MainViewModel", "ViewModel Constructed")
 
         dataProcessor = DataProcessor()
@@ -33,22 +32,15 @@ class MainViewModel(
 
 
         viewModelScope.launch(Dispatchers.Default) {
-//            liveSettings.postValue(loadSettings(getApplication()))
             settings = FileManager.loadSettings(getApplication())
             loadColors()
             currentRecord = settings.currentRecord
             Log.i("MainViewModel", "Current record: $currentRecord")
-            // testing
-//            dataProcessor = DataGenerator.generateData(DataGenerator.GAUSSIAN, 0)
-//            DataGenerator.generateData(dataProcessor, DataGenerator.GAUSSIAN, 1)
-            // real
-//            dataProcessor.readRecords(this@MainActivity, colors.keys.toList())    // replaced with MainActivity.readRecords()
             readRecords(colors.keys.toList())    // calls sortWeeks() if needed
             dataProcessor.runAnalysis(
                 getAnalysisProvider(),
                 getMetaAnalyses()
             ) // this line should be kept
-//            dataProcessor.sortWeeks()   // delete this line
             dataProcessor.findRelevantResults()
             Log.i("MainViewModel", "Relevant Results found")
         }
@@ -59,20 +51,6 @@ class MainViewModel(
     override fun onCleared() {
         super.onCleared()
         Log.i("MainViewModel", "View Model cleared")
-//        if(currentRecord != null){
-//            currentRecord!!.endTime = Calendar.getInstance().timeInMillis
-//            Log.d("MainViewModel", "Exercise created ${DataProcessor.formatTime(currentRecord!!.length())}")
-//            dataProcessor.addRecord(currentRecord!!.title, currentRecord)
-//            currentRecord = null
-//        }
-//        Log.d("MainViewModel", "${Thread.currentThread()}")
-//        viewModelScope.launch(Dispatchers.Default) {
-//            // save files
-//            Log.d("MainViewModel", "cleared coroutine started")
-//            writeRecords()
-//            saveColorsToSettingsObject()
-//            FileManager.saveSettings(getApplication(), settings)
-//        }
     }
 
 
@@ -125,9 +103,6 @@ class MainViewModel(
             if (w == numWeeks - 1)
                 dataProcessor.isRelevantResultsReady = true
         }
-
-        // do not move to next state, because multiple files can be read
-        // before sorting begins
     }
 
     suspend fun writeRecords() {
@@ -159,9 +134,6 @@ class MainViewModel(
         for(i in settings.exerciseNames.indices)
             colors[settings.exerciseNames[i]] =
                 settings.exerciseColors[i]
-//        for(i in liveSettings.value!!.exerciseNames.indices)
-//            liveColors.value!![liveSettings.value!!.exerciseNames[i]] =
-//                liveSettings.value!!.exerciseColors[i]
     }
 
     fun saveColorsToSettingsObject() {
@@ -195,6 +167,25 @@ class MainViewModel(
             Calendar.getInstance().timeInMillis,
             -1
         )
+    }
+
+    fun clearAllData(){
+        FileManager.deleteAllFiles(getApplication())
+        dataProcessor = DataProcessor()
+        dataProcessor.runAnalysis(getAnalysisProvider(), getMetaAnalyses())
+        dataProcessor.findRelevantResults()
+        currentRecord = null
+        colors = HashMap()
+        settings = Settings(mutableListOf(), mutableListOf(), null)
+    }
+
+    fun generateData() {
+        dataProcessor = DataProcessor()
+        colors = DataGenerator.generateData(dataProcessor, DataGenerator.DAY_TIME)
+        dataProcessor.runAnalysis(getAnalysisProvider(), getMetaAnalyses())
+        dataProcessor.findRelevantResults()
+        currentRecord = null
+        settings = Settings(colors.keys.toMutableList(), colors.values.toMutableList(), null)
     }
 
 }

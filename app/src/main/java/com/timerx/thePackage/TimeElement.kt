@@ -12,4 +12,6 @@ interface TimeElement {
 
     fun copy() : TimeElement
 
+    fun name() : String
+
 }

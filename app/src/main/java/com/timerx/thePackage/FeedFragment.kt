@@ -15,33 +15,25 @@ class FeedFragment(
 
     private lateinit var binding : FragmentFeedBinding
 
+    val minVelocityToFling = 450
+    lateinit var flingListener: FlinglessFlingListener
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentFeedBinding.bind(view)
         // setup
-        binding.primaryRecycler.adapter = FeedPrimaryRecycleViewAdapter()
+        binding.primaryRecycler.adapter = FeedPrimaryRecycleViewAdapter(this)
         binding.primaryRecycler.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, true)
 
         val snapHelper = FlinglessLinearSnapHelper()
         snapHelper.attachToRecyclerView(binding.primaryRecycler)
-        val minVelocity = 450
-        binding.primaryRecycler.onFlingListener = object: RecyclerView.OnFlingListener(){
-            override fun onFling(velocityX: Int, velocityY: Int): Boolean { // just snap
-                val layoutManager = binding.primaryRecycler.layoutManager ?: return false
-                val snapView =
-                    if(velocityX > minVelocity)
-                        layoutManager.getChildAt(0) ?: return false
-                    else if(velocityX < -minVelocity)
-                        layoutManager.getChildAt(1) ?: return false
-                    else
-                        snapHelper.findSnapView(layoutManager) ?: return false
-                val snapDistance = snapHelper.calculateDistanceToFinalSnap(layoutManager, snapView)
-                if (snapDistance!![0] != 0 || snapDistance[1] != 0) {
-                    binding.primaryRecycler.smoothScrollBy(snapDistance[0], snapDistance[1])
-                }
-                return true
-            }
-        }
+        flingListener = FlinglessFlingListener(binding.primaryRecycler, minVelocityToFling, snapHelper)
+        binding.primaryRecycler.onFlingListener = flingListener
+    }
+
+    fun updateAllData() {
+        if(this::binding.isInitialized)
+            binding.primaryRecycler.adapter?.notifyDataSetChanged()
     }
 
 }

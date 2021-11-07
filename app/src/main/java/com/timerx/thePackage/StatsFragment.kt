@@ -1,5 +1,6 @@
 package com.timerx.thePackage
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -13,7 +14,7 @@ class StatsFragment(
 
     private lateinit var binding : FragmentStatsBinding
 
-    private var adapter: StatsRecycleViewAdapter = StatsRecycleViewAdapter()
+    private var adapter: StatsRecycleViewAdapter = StatsRecycleViewAdapter(this)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -27,7 +28,51 @@ class StatsFragment(
         // TODO create Feed Fragment, recycle view, and result views
         Log.i("StatsFragment", "Waiting for results...")
         while(!MainActivity.viewModel.dataProcessor.isRelevantResultsReady);
+        Log.d("StatsFragment", "Results: ${MainActivity.viewModel.dataProcessor.relevantResults}")
         adapter.loadResults(MainActivity.viewModel.dataProcessor.relevantResults)
+    }
+
+    fun showConfirmGenerateDataDialog(){
+        val builder: AlertDialog.Builder = AlertDialog.Builder(context)
+        builder.setTitle("Generate random data? (This will clear your current data.)")
+
+        builder.setPositiveButton("Yes") { dialog, which ->
+            mainActivity.generateData()
+        }
+        builder.setNegativeButton("Cancel") { dialog, which -> dialog.cancel() }
+
+        builder.show()
+    }
+
+    fun showFirstConfirmClearAllDataDialog(){
+        val builder: AlertDialog.Builder = AlertDialog.Builder(context)
+        builder.setTitle("Clear all data?")
+
+        builder.setPositiveButton("Yes") { dialog, which ->
+            showSecondConfirmClearAllDataDialog()
+        }
+        builder.setNegativeButton("Cancel") { dialog, which -> dialog.cancel() }
+
+        builder.show()
+    }
+
+    fun showSecondConfirmClearAllDataDialog(){
+        val builder: AlertDialog.Builder = AlertDialog.Builder(MainActivity.mainActivity)
+        builder.setTitle("Are you sure?")
+
+        builder.setPositiveButton("Yes") { dialog, which ->
+            mainActivity.clearAllData()
+        }
+        builder.setNegativeButton("Cancel") { dialog, which -> dialog.cancel() }
+
+        builder.show()
+    }
+
+    fun updateAllData() {
+        if(this::binding.isInitialized) {
+            adapter.clearResultsWithoutNotifying()
+            loadResults()
+        }
     }
 
 }

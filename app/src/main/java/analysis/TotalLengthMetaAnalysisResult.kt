@@ -21,15 +21,24 @@ class TotalLengthMetaAnalysisResult(
     var longestExercise: Array<String>
 ) : MetaAnalysisResult() {
     override var description: String?
-        get() = if (longestExercise.size != 0 && lengths[0] != null && lengths[0]!![longestExercise[0]] != null) "You spent " + DataProcessor.formatTime(
-            lengths[0]!![longestExercise[0]]!!
-        ) + " on " + longestExercise[0] + " this week." else "You spent 0ms on null this week."
+        get() = getDescription(0)
         set(description) {
             this@TotalLengthMetaAnalysisResult.description = description
         }
 
+    fun getDescription(week: Int): String{
+        if (longestExercise.size != 0 && lengths[week] != null && lengths[week]!![longestExercise[week]] != null)
+            return "You spent the most time on " + longestExercise[week] + " " +
+                    DataProcessor.formatWeekIndex(week).lowercase() + " with " +
+                    DataProcessor.formatTime(lengths[week]!![longestExercise[week]]!!) +
+                    " total!"
+        return ""
+    }
+
     init {
-        require(lengths.size == longestExercise.size) { "You gave " + lengths.size + " weeks of lengths but " + longestExercise.size + " weeks of longest exercise labels." }
+        require(lengths.size == longestExercise.size) {
+            "You gave " + lengths.size + " weeks of lengths but " + longestExercise.size + " weeks of longest exercise labels."
+        }
     }
 
     companion object{ const val KEY = "tlmar" }
@@ -57,7 +66,7 @@ class TotalLengthMetaAnalysisResult(
         val binding = WidgetAnalysisChartBinding.bind(layout)
         val chart = binding.chart
         val textView = binding.textView
-        textView.text = "Length each day ${DataProcessor.formatWeekIndex(viewType).lowercase()}:\n$description"
+        textView.text = "Length of each exercise ${DataProcessor.formatWeekIndex(viewType).lowercase()}:\n${getDescription(viewType)}"
         val names = week.keys.toTypedArray()
         val data = week.values.toTypedArray()
         chart.setData(Array(data.size) { a ->

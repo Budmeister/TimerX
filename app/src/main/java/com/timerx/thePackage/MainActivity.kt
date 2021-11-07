@@ -112,7 +112,6 @@ class MainActivity : AppCompatActivity() {
             try {
                 val hours = input.text.toString().toFloat()
                 currentRecord.endTime = currentRecord.startTime + (DataProcessor.MILLISECONDS_PER_HOUR * hours).toLong()
-//                viewModel.storeCurrentRecordToDataProcessor()
                 homeFragment.storeExerciseRecord()
             } catch(e: NumberFormatException){
                 showIncorrectCurrentRecordVerification(input.text.toString())
@@ -126,6 +125,24 @@ class MainActivity : AppCompatActivity() {
         }
 
         builder.show()
+    }
+
+    fun clearAllData(){
+        viewModel.clearAllData()
+        homeFragment.updateAllData()
+        feedFragment.updateAllData()
+        calendarFragment.updateAllData()
+        binding.bottomNavigationView.selectedItemId = R.id.miHome
+        statsFragment.updateAllData()
+    }
+
+    fun generateData(){
+        viewModel.generateData()
+        homeFragment.updateAllData()
+        feedFragment.updateAllData()
+        calendarFragment.updateAllData()
+        binding.bottomNavigationView.selectedItemId = R.id.miHome
+        statsFragment.updateAllData()
     }
 
 

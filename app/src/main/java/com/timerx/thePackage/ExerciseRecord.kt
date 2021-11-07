@@ -33,7 +33,7 @@ class ExerciseRecord(var title: String, var startTime: Long, var endTime: Long) 
         this.startTime = startTime
     }
 
-    override fun copy(): TimeElement {
-        return ExerciseRecord(title, startTime, endTime)
-    }
+    override fun copy() = ExerciseRecord(title, startTime, endTime)
+
+    override fun name() = title
 }

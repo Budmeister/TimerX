@@ -21,7 +21,7 @@ class TimeOfDayAnalysisResult(
     override var description: String?
         get() = "Most of your " + title.toString() + " was done in the " + DataProcessor.timesOfDay[longestTimeOfDay].toString() + " with " + DataProcessor.formatTime(
             lengthEachTimeOfDay[longestTimeOfDay]
-        ).toString() + " spent."
+        ).toString() + " total."
         set(description) {
             this@TimeOfDayAnalysisResult.description = description
         }
@@ -30,6 +30,8 @@ class TimeOfDayAnalysisResult(
     override fun key(): String {
         return KEY
     }
+
+    override fun hasView() = lengthEachTimeOfDay[longestTimeOfDay] != 0L
 
     override fun getView(parent: ViewGroup): View {
         val layout = LayoutInflater.from(parent.context).inflate(R.layout.widget_analysis_chart, parent, false)

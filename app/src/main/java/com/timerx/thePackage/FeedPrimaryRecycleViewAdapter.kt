@@ -8,7 +8,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.timerx.thePackage.databinding.RecycleLayoutFeedPrimaryBinding
 
-class FeedPrimaryRecycleViewAdapter() : RecyclerView.Adapter<FeedPrimaryRecycleViewAdapter.FeedPrimaryViewHolder>() {
+class FeedPrimaryRecycleViewAdapter(
+    val fragment: FeedFragment
+) : RecyclerView.Adapter<FeedPrimaryRecycleViewAdapter.FeedPrimaryViewHolder>() {
 
     class FeedPrimaryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 

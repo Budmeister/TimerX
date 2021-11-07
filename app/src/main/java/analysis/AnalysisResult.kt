@@ -38,6 +38,8 @@ sealed class AnalysisResult : Comparable<AnalysisResult> {
 
     abstract fun key(): String
 
+    abstract fun hasView(): Boolean
+
     abstract fun getView(parent: ViewGroup): View
 
 }

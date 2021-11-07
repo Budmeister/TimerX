@@ -1,6 +1,7 @@
 package com.timerx.thePackage
 
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -15,6 +16,16 @@ class CalendarRecycleViewAdapter(
 ): RecyclerView.Adapter<CalendarRecycleViewAdapter.CalendarViewHolder>() {
 
     class CalendarViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+
+    var startTime = 4 * DataProcessor.MILLISECONDS_PER_HOUR
+    var endTime = 20 * DataProcessor.MILLISECONDS_PER_HOUR
+
+    private lateinit var mRecyclerView: RecyclerView
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+        mRecyclerView = recyclerView
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CalendarViewHolder {
         val layout = LayoutInflater.from(parent.context).inflate(
@@ -35,12 +46,22 @@ class CalendarRecycleViewAdapter(
             layoutBinding.rightArrow.setImageResource(R.drawable.ic_empty)
         }else {
             textView.text = MainActivity.viewModel.dataProcessor.formatWeekOfDate(position)
+            layoutBinding.rightArrow.setOnClickListener {
+                fragment.flingListener.flingRightFromStationary()
+            }
         }
-        if (position == numWeeks - 1)
+        if (position == numWeeks - 1) {
             layoutBinding.leftArrow.setImageResource(R.drawable.ic_empty)
+        }else {
+            layoutBinding.leftArrow.setOnClickListener {
+                fragment.flingListener.flingLeftFromStationary()
+            }
+        }
 
         // calendar view
         val calendar = layoutBinding.calendar
+        calendar.startTime = startTime
+        calendar.endTime = endTime
         calendar.colorProvider = { er ->
             MainActivity.viewModel.colors[(er as ExerciseRecord).title]?: Color.LTGRAY
         }

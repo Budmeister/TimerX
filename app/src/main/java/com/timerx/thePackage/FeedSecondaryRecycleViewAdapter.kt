@@ -28,9 +28,17 @@ class FeedSecondaryRecycleViewAdapter(
                 binding.rightArrow.setImageResource(R.drawable.ic_empty)
             }else {
                 binding.title.text = MainActivity.viewModel.dataProcessor.formatWeekOfDate(week)
+                binding.rightArrow.setOnClickListener {
+                    primary.fragment.flingListener.flingRightFromStationary()
+                }
             }
-            if(week == primary.itemCount - 1)
+            if(week == primary.itemCount - 1) {
                 binding.leftArrow.setImageResource(R.drawable.ic_empty)
+            }else{
+                binding.leftArrow.setOnClickListener {
+                    primary.fragment.flingListener.flingLeftFromStationary()
+                }
+            }
             return FeedSecondaryViewHolder(layout)
         }else {             // normal widget
             val metaWeek = MainActivity.viewModel.dataProcessor.organizedResults

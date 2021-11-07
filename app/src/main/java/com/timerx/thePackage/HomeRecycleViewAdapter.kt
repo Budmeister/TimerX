@@ -17,13 +17,10 @@ import com.timerx.thePackage.databinding.WidgetExerciseSingleBinding
 import kotlin.collections.HashMap
 
 class HomeRecycleViewAdapter(
-    private val fragment: HomeFragment,
-    private val exercises: MutableList<ExerciseWidget>
+    private val fragment: HomeFragment
 ) : RecyclerView.Adapter<HomeRecycleViewAdapter.ExerciseViewHolder>() {
 
-    init{
-        exercises.add(ExerciseWidget("", Color.LTGRAY))
-    }
+    private var exercises = mutableListOf<ExerciseWidget>()
 
     private val buttons = HashMap<String, ExerciseWidgetView>()
     val play  = ResourcesCompat.getDrawable(MainActivity.mainActivity.resources, R.drawable.ic_play, null)
@@ -85,7 +82,7 @@ class HomeRecycleViewAdapter(
             button.setColor(color)
             if(name == ""){ // the add-exercise button
                 button.setOnClickListener {
-                    showAddExerciseDialog()
+                    fragment.showAddExerciseDialog()
                 }
                 button.setIcon(add)
             }else {
@@ -104,7 +101,7 @@ class HomeRecycleViewAdapter(
                 }
                 button.setOnLongClickListener {
 
-                    showConfirmDeleteExerciseDialog(name, 2 * position + b)
+                    fragment.showConfirmDeleteExerciseDialog(name, 2 * position + b)
                     true
                 }
             }
@@ -113,7 +110,7 @@ class HomeRecycleViewAdapter(
         }
     }
 
-    private fun addExerciseWidget(name: String, color: Int){
+    fun addExerciseWidget(name: String, color: Int){
         exercises.add(exercises.size - 1, ExerciseWidget(name, color))
         fragment.createExercise(name, color)
         exercises.sortBy { widget -> if(widget.name == "") "zzzzzzzzzzzzzzzzzzzzzz" else widget.name }
@@ -126,54 +123,23 @@ class HomeRecycleViewAdapter(
 
     }
 
-    private fun showConfirmDeleteExerciseDialog(name: String, index: Int){
-        val builder: AlertDialog.Builder = AlertDialog.Builder(MainActivity.mainActivity)
-        builder.setTitle("Delete $name?")
-
-        builder.setPositiveButton("OK") { dialog, which ->
-            MainActivity.mainActivity.deleteExercise(name)
-            deleteExerciseWidget(index)
-        }
-        builder.setNegativeButton("Cancel") { dialog, which -> dialog.cancel() }
-
-        builder.show()
-
-    }
-
-    private fun deleteExerciseWidget(index: Int) {
+    fun deleteExerciseWidget(index: Int) {
         exercises.removeAt(index)
         exercises.sortBy { widget -> if(widget.name == "") "zzzzzzzzzzzzzzzzzzzzzz" else widget.name }
         notifyDataSetChanged()
     }
 
-    private fun showAddExerciseColorPicker(name: String){
-        ColorPickerDialog
-            .Builder(MainActivity.mainActivity)
-            .setTitle(name)
-            .setColorShape(ColorShape.SQAURE)
-            .setDefaultColor(R.color.light_blue_900)
-            .setColorListener { color, colorHex -> addExerciseWidget(name, color) }
-            .show()
+    fun deleteAllExercises() {
+        val addButton = exercises[exercises.size - 1]
+        exercises.clear()
+        exercises.add(addButton)
+        notifyDataSetChanged()
     }
 
-    private fun showAddExerciseDialog(){
-        val builder: AlertDialog.Builder = AlertDialog.Builder(MainActivity.mainActivity)
-        builder.setTitle("Add exercise")
-
-        val input = EditText(MainActivity.mainActivity)
-        input.hint = "Exercise Title"
-        input.inputType = InputType.TYPE_CLASS_TEXT
-        builder.setView(input)
-
-        builder.setPositiveButton("OK") { dialog, which ->
-            val name = input.text.toString()
-            showAddExerciseColorPicker(name)
-            dialog.cancel()
-        }
-        builder.setNegativeButton("Cancel") { dialog, which -> dialog.cancel() }
-
-        builder.show()
-
+    fun setExercises(ex: MutableList<ExerciseWidget>){
+        exercises = ex
+        exercises.add(ExerciseWidget("", Color.LTGRAY))
+        notifyDataSetChanged()
     }
 
     override fun getItemCount(): Int {

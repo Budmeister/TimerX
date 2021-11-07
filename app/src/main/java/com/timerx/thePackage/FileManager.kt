@@ -182,6 +182,16 @@ class FileManager {
             }
         }
 
+        fun deleteAllFiles(context: Context){
+            context.filesDir.listFiles()?.map{
+                try {
+                    it?.delete()
+                } catch (e: Exception){
+                    e.printStackTrace()
+                }
+            }
+        }
+
     }
 
 }

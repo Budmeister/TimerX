@@ -22,16 +22,25 @@ class TimeOfDayMetaAnalysisResult(
 ) : MetaAnalysisResult() {
 
     override var description: String?
-        get() = if (lengths.size != 0 && timeLengths[0] != null) "You spent " + DataProcessor.formatTime(
-            timeLengths[0]!![longestTime[0]]
-        ) + " in the " + DataProcessor.timesOfDay[longestTime[0]] + " this week." else "You spent 0ms in the null this week."
+        get() = getDescription(0)
         set(description)
         {
             this@TimeOfDayMetaAnalysisResult.description = description
         }
 
+    fun getDescription(week: Int) : String{
+        if (lengths.size != 0 && timeLengths[week] != null)
+            return "You tracked " + DataProcessor.formatTime(
+                    timeLengths[week]!![longestTime[week]]
+                ) + " total in the " + DataProcessor.timesOfDay[longestTime[week]] + " " +
+                DataProcessor.formatWeekIndex(week).lowercase() + "!"
+        return ""
+    }
+
     init {
-        require(!(lengths.size != timeLengths.size || timeLengths.size != longestTime.size)) { "Illegal numbers of weeks: " + lengths.size + "," + timeLengths.size + "," + longestTime.size }
+        require(!(lengths.size != timeLengths.size || timeLengths.size != longestTime.size)) {
+            "Illegal numbers of weeks: " + lengths.size + "," + timeLengths.size + "," + longestTime.size
+        }
     }
 
     companion object{ const val KEY = "todmar" }
@@ -54,7 +63,7 @@ class TimeOfDayMetaAnalysisResult(
         val binding = WidgetAnalysisChartBinding.bind(layout)
         val chart = binding.chart
         val textView = binding.textView
-        textView.text = "Time of day ${DataProcessor.formatWeekIndex(viewType).lowercase()}:\n$description"
+        textView.text = "Time of day ${DataProcessor.formatWeekIndex(viewType).lowercase()}:\n${getDescription(viewType)}"
         val names = lengths[viewType].keys.toTypedArray()
         val data = lengths[viewType].values.toTypedArray()
         chart.setData(data)
