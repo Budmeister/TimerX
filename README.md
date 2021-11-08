@@ -31,7 +31,7 @@ analyses are:<br>
 * `LongestSessionAnalysis`
 * `TotalLength`
 
-Each `Analsysis` represents an anlysis of the records of one exercise in one week, 
+Each `Analsysis` represents an analysis of the records of one exercise in one week, 
 and it produces one or more `AnalysisResult`'s. So there will be one of each type of 
 `AnalysisResult` for each exercise for each week. Most `AnalysisResult`'s create a 
 view in the Stats page. Then, the set of `AnalysisResult`'s are sent to the 
