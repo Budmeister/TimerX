@@ -13,7 +13,8 @@ exercise is just an activity you want to track.
 Once you have the your exercises created, tap one to start the recording.
 If you want to delete an exercise, hold it down and confirm by tapping "yes".
 
-Statistics about all your exercises appear in the feed page.
+Statistics about all your exercises appear in the feed page. Statistics update
+each time you open the app.
 
 You can see all your history on the calendar page. Swipe left to see last week.
 
